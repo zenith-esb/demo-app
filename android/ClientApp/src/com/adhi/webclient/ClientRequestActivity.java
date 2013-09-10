@@ -10,6 +10,10 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
 
+import com.adhi.webclient.util.ClientUtil;
+
+
+
 
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -23,6 +27,7 @@ import android.widget.EditText;
 public class ClientRequestActivity extends Activity{
 	private Button requestBtn;
 	private EditText messageTxtBx;
+	private String TAG = ClientUtil.TAG;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -50,7 +55,7 @@ public class ClientRequestActivity extends Activity{
 			String data = null;
 			
 			try {//http://localhost:9000/services/SimpleStockQuoteService
-				  URL url = new URL("http://192.168.105.1:9000/services/SimpleStockQuoteService");
+				  URL url = new URL(ClientUtil.getDataRequestServiceUrl());
 				  
 				  /**
 				   * HTTP GET thing
@@ -71,7 +76,7 @@ public class ClientRequestActivity extends Activity{
 		protected void onPostExecute(String result) {
 			// TODO Auto-generated method stub
 			
-			Log.i("WebClient", result);
+			Log.i(TAG, result);
 			messageTxtBx.setText(result);
 			requestBtn.setEnabled(true);
 			

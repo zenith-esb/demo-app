@@ -35,6 +35,7 @@
         android:layout_below="@+id/topic"
         android:layout_marginTop="63dp"
         android:ems="10"
+        android:text="No Lectures today!!!"
         android:inputType="textMultiLine" />
 
     <Button

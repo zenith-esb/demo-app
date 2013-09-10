@@ -10,6 +10,8 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
 
+import com.adhi.webclient.util.ClientUtil;
+
 
 
 import android.app.Activity;
@@ -28,7 +30,7 @@ public class EventPublisherActivity extends Activity {
 	private EditText topicTxtBx;
 	private String topic ="";
 	private String message = "";
-	
+	private String TAG = ClientUtil.TAG;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -48,7 +50,7 @@ public class EventPublisherActivity extends Activity {
 				publish .setEnabled(false);
 				topic = topicTxtBx.getText().toString();
 				message = messageTxtBx.getText().toString();
-				Log.i("WebClient", "topic " + topic + ", message " +message );
+				Log.i(TAG, "topic " + topic + ", message " +message );
 				new ConnectBackground().execute();
 				
 			}
@@ -63,7 +65,8 @@ public class EventPublisherActivity extends Activity {
 			String data = null;
 			
 			try {
-				  URL url = new URL("http://192.168.105.1:8280/message");
+				  URL url = new URL(ClientUtil.getMessagingServiceUrl());
+				
 				 /*
 				  HttpURLConnection con = (HttpURLConnection) url
 				    .openConnection();
@@ -80,7 +83,7 @@ public class EventPublisherActivity extends Activity {
 		protected void onPostExecute(String result) {
 			// TODO Auto-generated method stub
 			
-			Log.i("WebClient", result);
+			Log.i(TAG, result);
 			//txt.setText(result);
 			publish .setEnabled(true);
 			Toast.makeText(getApplicationContext(), "Messaged Published", Toast.LENGTH_SHORT).show();
@@ -137,11 +140,15 @@ public class EventPublisherActivity extends Activity {
 
 		private String getMessageBody() {
 			// TODO Auto-generated method stub
+			/*
 			String body = "<?xml version=\"1.0\"?>" +
 						  "<root>" +
 							"<title>CSE message</title>" +
 							"<message>" + message + "</message>" +
 					   	   "</root>";
+			 */
+			String body = "Notification," + message; //message body in text/csv format
+													//format is title,body
 			return body;
 		}
 	}
