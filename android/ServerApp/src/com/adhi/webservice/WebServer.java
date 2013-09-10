@@ -22,6 +22,8 @@ import org.apache.http.protocol.ResponseContent;
 import org.apache.http.protocol.ResponseDate;
 import org.apache.http.protocol.ResponseServer;
 
+import com.adhi.webservice.util.ServerUtil;
+
 
 
 import android.app.NotificationManager;
@@ -37,7 +39,7 @@ public class WebServer extends Thread {
 	
 	private boolean isRunning = false;
 	private Context context = null;
-	private int serverPort = 0;
+	private int serverPort = ServerUtil.APP_PORT;
 	
 	private BasicHttpProcessor httpproc = null;
 	private BasicHttpContext httpContext = null;
@@ -46,14 +48,14 @@ public class WebServer extends Thread {
 	private NotificationManager notifyManager = null;
 	
 	public WebServer(Context context, NotificationManager notifyManager){
-		super(SERVER_NAME);
+		super(ServerUtil.SERVER_NAME);
 		
 		this.setContext(context);
 		this.setNotifyManager(notifyManager);
 		
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 		
-		serverPort = 9999;//Integer.parseInt(pref.getString(Constants.PREF_SERVER_PORT, "" + Constants.DEFAULT_SERVER_PORT));
+		//serverPort = 9999;//Integer.parseInt(pref.getString(Constants.PREF_SERVER_PORT, "" + Constants.DEFAULT_SERVER_PORT));
 		httpproc = new BasicHttpProcessor();
 		httpContext = new BasicHttpContext();
 		

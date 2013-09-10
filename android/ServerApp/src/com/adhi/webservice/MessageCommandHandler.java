@@ -19,6 +19,9 @@ import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.HttpRequestHandler;
 import org.apache.http.util.EntityUtils;
 
+import com.adhi.webservice.util.NotificationUtil;
+import com.adhi.webservice.util.ServerUtil;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -34,6 +37,7 @@ public class MessageCommandHandler implements HttpRequestHandler{
 	
 	private Context context = null;
 	private NotificationManager notifyManager = null;
+	private String TAG = ServerUtil.TAG;
 	
 	public MessageCommandHandler(Context context, NotificationManager notifyManager){
 		this.context = context;
@@ -63,13 +67,14 @@ public class MessageCommandHandler implements HttpRequestHandler{
 	        }
 	        body = new String(data);
 	       
-		Log.i("WebService", body);
+		Log.i(TAG, body);
 		//AppLog.logString("Message URI: " + uriString);
-		Log.i("WebService", "Message URI: " + uriString);
+		Log.i(TAG, "Message URI: " + uriString);
 		//displayMessage(message);
 		//NotificationUtil.showNotification(notifyManager, context, "Notification", "Message URI: " + uriString);
-		String message = body;//XMLProcessor.getValue(body, "message");
-		String title = "notification";//XMLProcessor.getValue(body, "title");
+		String[] content = getContent(body);
+		String message = content[1];//XMLProcessor.getValue(body, "message");
+		String title = content[0];//XMLProcessor.getValue(body, "title");
 		NotificationUtil.showNotification(notifyManager, context, title, message);
 		HttpEntity entity = new EntityTemplate(new ContentProducer() {
     		public void writeTo(final OutputStream outstream) throws IOException {
@@ -85,38 +90,17 @@ public class MessageCommandHandler implements HttpRequestHandler{
 		response.setEntity(entity);
 	}
 	
-	protected void displayMessage(final String message) {
-		/*
-		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-		String text = context.getString(R.string.message_ticker_text);
-		Notification notification = new Notification(R.drawable.messageicon, text, System.currentTimeMillis());
-		Intent startIntent = new Intent(context,AWSMessageActivity.class);
-		boolean isVibrate = pref.getBoolean(Constants.PREF_VIBRATE, true);
-		boolean isPlaysound = pref.getBoolean(Constants.PREF_PLAYSOUND, true);
-		String notificationSound = pref.getString(Constants.PREF_RINGTONE, "");
-		
-		startIntent.putExtra(Constants.AWS_MESSAGE, message);
-		
-		PendingIntent intent = PendingIntent.getActivity(context, 0, startIntent, Intent.FLAG_ACTIVITY_NEW_TASK);
-		
-		notification.defaults = Notification.DEFAULT_LIGHTS;
-		notification.flags |= (Notification.FLAG_ONLY_ALERT_ONCE | Notification.FLAG_AUTO_CANCEL);
-		
-		if(isVibrate)
-			notification.vibrate = VIBRATE;
-		
-		if(isPlaysound && notificationSound.length() > 0)
-			notification.sound = Uri.parse(notificationSound);
-		
-		notification.setLatestEventInfo(context, 
-				context.getString(R.string.message_title), 
-				message, 
-				intent);
-		
-		notifyManager.notify(R.string.message_title, notification);
-			*/
-	} 
+	
 	private String createRespMsg(){
 		return "<html><body><p>Message from Android server</p></body></html>";
+	}
+	
+	private String[] getContent(String body){
+		String[] content;	
+		Log.i(TAG, "body : " + body);
+		content = body.split(","); //message body is in text/csv
+		Log.i(TAG, "array : " + content.length);
+		return content;
+		
 	}
 }

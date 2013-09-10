@@ -1,5 +1,7 @@
 package com.adhi.webservice;
 
+import com.adhi.webservice.util.ServerUtil;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -13,7 +15,7 @@ public class MainActivity extends Activity {
 
 	private Button btn_start;
 	private Button btn_stop;
-	
+	private String TAG = ServerUtil.TAG;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +33,7 @@ public class MainActivity extends Activity {
 				// TODO Auto-generated method stub
 				btn_start.setEnabled(false);
 				btn_stop.setEnabled(true);
-				Log.i("WebService", "Starting server");
+				Log.i(TAG, "Starting server");
 				//server.startThread();
 				startService(new Intent(MainActivity.this, ServerBackgroundService.class));
 			}
@@ -44,7 +46,7 @@ public class MainActivity extends Activity {
 				// TODO Auto-generated method stub
 				btn_start.setEnabled(true);
 				btn_stop.setEnabled(false);
-				Log.i("WebService", "Stopping server");
+				Log.i(TAG, "Stopping server");
 				//server.startThread();
 				stopService(new Intent(MainActivity.this, ServerBackgroundService.class));
 			}
