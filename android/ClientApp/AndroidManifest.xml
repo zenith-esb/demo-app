@@ -26,7 +26,7 @@
         </activity>
         <activity android:name="com.adhi.webclient.EventPublisherActivity"></activity>
         <activity android:name="com.adhi.webclient.ClientRequestActivity"></activity>
-        
+        <activity android:name="com.adhi.webclient.SettingsActivity"></activity>
     </application>
 
 </manifest>
