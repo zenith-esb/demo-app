@@ -56,6 +56,7 @@ public class SettingsActivity extends Activity{
 
 	@Override
 	protected void onResume() {
+		super.onResume();
 		ip.setText(ClientUtil.getEsbAddress());
 		port.setText(ClientUtil.getEsbPort());
 	}
