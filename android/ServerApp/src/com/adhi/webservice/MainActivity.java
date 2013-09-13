@@ -4,6 +4,9 @@ import com.adhi.webservice.util.ServerUtil;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningServiceInfo;
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.view.Menu;
@@ -23,7 +26,14 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		btn_start = (Button) findViewById(R.id.button1);
 		btn_stop = (Button) findViewById(R.id.button2);
-		btn_stop.setEnabled(false);
+		
+		if(isServerRunning()){
+			btn_start.setEnabled(false);
+			btn_stop.setEnabled(true);
+		} else {
+			btn_start.setEnabled(true);
+			btn_stop.setEnabled(false);
+		}
 	
 		
 		btn_start.setOnClickListener(new OnClickListener() {
@@ -54,12 +64,35 @@ public class MainActivity extends Activity {
 		
 		
 	}
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		
+		if(isServerRunning()){
+			btn_start.setEnabled(false);
+			btn_stop.setEnabled(true);
+		} else {
+			btn_start.setEnabled(true);
+			btn_stop.setEnabled(false);
+		}
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
+	}
+	
+	private boolean isServerRunning() {
+	    ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+	    for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+	        if (ServerBackgroundService.class.getName().equals(service.service.getClassName())) {
+	            return true;
+	        }
+	    }
+	    return false;
 	}
 
 }
