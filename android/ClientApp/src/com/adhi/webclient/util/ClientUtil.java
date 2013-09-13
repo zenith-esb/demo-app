@@ -6,7 +6,7 @@ public class ClientUtil {
 	
 	private static String messagingServicePath = "/message";
 	private static String dataServicePath = "/services/SimpleStockQuoteService";
-	private static String esbAddress = "http://192.168.105.1";
+	private static String esbAddress = "http://192.168.105.103";
 	private static String esbPort = "8280";
 	
 	public static void setMessagingServicePath(String messagingServicePath) {
