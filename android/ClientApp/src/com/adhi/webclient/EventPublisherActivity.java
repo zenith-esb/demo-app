@@ -9,6 +9,9 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
 
 import com.adhi.webclient.util.ClientUtil;
 
@@ -20,17 +23,23 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 public class EventPublisherActivity extends Activity {
 	private EditText messageTxtBx;
 	private Button publish;
 	private EditText topicTxtBx;
-	private String topic ="";
+	private String topic ="All";
 	private String message = "";
 	private String TAG = ClientUtil.TAG;
+	private Spinner spinner;
+	private Button back;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -39,33 +48,89 @@ public class EventPublisherActivity extends Activity {
 		
 		messageTxtBx = (EditText) findViewById(R.id.pub_msg);
 		
-		topicTxtBx = (EditText) findViewById(R.id.topic);
 		
-		publish = (Button) findViewById(R.id.btn_publish);
+		//topicTxtBx = (EditText) findViewById(R.id.pub_msg);
+		
+		publish = (Button) findViewById(R.id.pub_pubbtn);
 		publish.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
 				publish .setEnabled(false);
-				topic = topicTxtBx.getText().toString();
+				//topic = topicTxtBx.getText().toString();
+				
 				message = messageTxtBx.getText().toString();
 				Log.i(TAG, "topic " + topic + ", message " +message );
 				new ConnectBackground().execute();
 				
 			}
 		});
+		
+		back = (Button) findViewById(R.id.pub_backbtn);
+		back.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				finish();
+			}
+		});
+		
+		initSpinner();
+		messageTxtBx.setText(setMessage(topic));
 	}
+	private String setMessage(String topic) {
+		// TODO Auto-generated method stub
+		String msg = "";
+		if(topic.equalsIgnoreCase("All")){
+			msg = "Train will leave in a few moments";
+		} else {
+			msg = "Train will reach " + topic + " in a few moments";
+		}
+		return msg;
+	}
+	private void initSpinner(){
+		spinner = (Spinner) findViewById(R.id.Spinner01);
+		List<String> list = new ArrayList<String>();
+		list.add("All");
+		list.add("Fort");
+		list.add("Gampaha");
 	
+		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+			android.R.layout.simple_spinner_item, list);
+		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinner.setAdapter(dataAdapter);
+		
+		spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3) {
+				// TODO Auto-generated method stub
+				
+				topic = arg0.getItemAtPosition(arg2).toString();
+				messageTxtBx.setText(setMessage(topic));
+				Log.d(TAG, "Spinner item " + topic );
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// TODO Auto-generated method stub
+				topic = "All";
+			}
+		});
+	}
 	private class ConnectBackground extends AsyncTask<Void, Void, String>{
 
 		@Override
 		protected String doInBackground(Void... arg0) {
 			// TODO Auto-generated method stub
 			String data = null;
-			
+			String pubUrl = ClientUtil.getMessagingServiceUrl() + "/" + topic; //change this 
+			Log.i(TAG, "publish to : " + pubUrl);
 			try {
-				  URL url = new URL(ClientUtil.getMessagingServiceUrl());
+				  URL url = new URL(pubUrl);
 				
 				 /*
 				  HttpURLConnection con = (HttpURLConnection) url
