@@ -28,19 +28,23 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class ClientRequestActivity extends Activity{
 	private Button requestBtn;
-	private EditText messageTxtBx;
+	private EditText txtCompartment;
+	private TextView messageTxtBx;
+	
 	private String TAG = ClientUtil.TAG;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.request);
-		messageTxtBx = (EditText) findViewById(R.id.req_reply_msg);
-		
+		messageTxtBx = (TextView) findViewById(R.id.req_reply_msg);
+		txtCompartment = (EditText)findViewById(R.id.inputText);
 		requestBtn = (Button) findViewById(R.id.request_btn);
+		
 		requestBtn.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -72,7 +76,7 @@ public class ClientRequestActivity extends Activity{
 				  data = readStream(con.getInputStream());
 				  */
 				//  data = getKSoapMessage("A");
-				  data = XMLProcessor.processXML(sendMessage(url, getMessageBody()));
+				  data = XMLProcessor.processXML(sendMessage(url, getMessageBody(txtCompartment.getText().toString())));
 				  } catch (Exception e) {
 				  e.printStackTrace();
 				}
@@ -142,10 +146,10 @@ public class ClientRequestActivity extends Activity{
 			return response;
 		}
 
-		private String getMessageBody() {
+		private String getMessageBody(String compartment) {
 			// TODO Auto-generated method stub
 			String msg = "<ns1:getAvailableSeats xmlns:ns1=\"http://service.zenith.com\">" +
-			"<ns1:compartment>A</ns1:compartment></ns1:getAvailableSeats>";
+			"<ns1:compartment>"+compartment+"</ns1:compartment></ns1:getAvailableSeats>";
 			
 			String body = "<?xml version='1.0' encoding='UTF-8'?>" +
 					"<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\">" +
