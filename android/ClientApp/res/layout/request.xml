@@ -15,26 +15,47 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:orientation="vertical" >
+            android:orientation="horizontal" >
 
-            <EditText
-                android:id="@+id/req_reply_msg"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textMultiLine" >
-
-                <requestFocus />
-            </EditText>
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="67dp"
+            android:text="Enter the Compartment" />
+
+        <EditText
+            android:id="@+id/inputText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView1"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="18dp"
+            android:ems="10" />
 
         <Button
             android:id="@+id/request_btn"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/linearLayout1"
             android:layout_alignParentLeft="true"
+            android:layout_below="@+id/inputText"
+            android:layout_marginTop="16dp"
             android:text="Request" />
+
+        <TextView
+            android:id="@+id/req_reply_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/linearLayout1"
+            android:layout_centerHorizontal="true"
+            android:ems="10"
+            android:inputType="textMultiLine" />
+
     </RelativeLayout>
 
 </LinearLayout>
