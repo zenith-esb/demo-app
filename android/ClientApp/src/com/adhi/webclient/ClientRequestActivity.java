@@ -4,11 +4,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
+
 
 import com.adhi.webclient.util.ClientUtil;
 
@@ -18,7 +17,6 @@ import com.adhi.webclient.util.ClientUtil;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -42,6 +40,7 @@ public class ClientRequestActivity extends Activity{
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
 				requestBtn.setEnabled(false);
+				
 				new ConnectBackground().execute();
 				
 			}
@@ -52,10 +51,10 @@ public class ClientRequestActivity extends Activity{
 		@Override
 		protected String doInBackground(Void... arg0) {
 			// TODO Auto-generated method stub
-			String data = null;
 			
+			String data = null;
 			try {//http://localhost:9000/services/SimpleStockQuoteService
-				  URL url = new URL(ClientUtil.getDataRequestServiceUrl());
+				  URL url = new URL(ClientUtil.getDataRequestServiceUrl()+ "?wsdl");
 				  
 				  /**
 				   * HTTP GET thing
@@ -76,7 +75,8 @@ public class ClientRequestActivity extends Activity{
 		protected void onPostExecute(String result) {
 			// TODO Auto-generated method stub
 			
-			Log.i(TAG, result);
+		//	Log.i(TAG, result);
+			
 			messageTxtBx.setText(result);
 			requestBtn.setEnabled(true);
 			
@@ -106,17 +106,19 @@ public class ClientRequestActivity extends Activity{
 		}
 		
 		private String sendMessage(URL url, String message) throws IOException{
+			
 			URLConnection connection = url.openConnection();
-			connection.setDoInput(true);
+			connection.setRequestProperty("Content-Length", String.valueOf(message.length())); 
+			connection.setRequestProperty("Content-Type", "text/xml"); 
+			connection.setRequestProperty("Connection", "Close"); 
+			connection.setRequestProperty("SoapAction", ""); 
 			connection.setDoOutput(true);
-
+			
+			PrintWriter pw = new PrintWriter(connection.getOutputStream()); 
+			pw.write(message); 
+			pw.flush();
+			
 			connection.connect();
-
-			OutputStream os = connection.getOutputStream();
-			PrintWriter pw = new PrintWriter(new OutputStreamWriter(os));
-			String payload = message;
-			pw.write(payload);
-			pw.close();
 
 			InputStream is = connection.getInputStream();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(is));
@@ -135,7 +137,7 @@ public class ClientRequestActivity extends Activity{
 			String body = "<?xml version='1.0' encoding='UTF-8'?>" +
 					"<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\">" +
 						"<soapenv:Header xmlns:wsa=\"http://www.w3.org/2005/08/addressing\">" +
-							"<wsa:To>http://localhost:9000/services/SimpleStockQuoteService</wsa:To>" +
+							"<wsa:To>http://192.168.106.1:9000/services/SimpleStockQuoteService</wsa:To>" +
 							"<wsa:MessageID>urn:uuid:5d988edb-fd88-4f8c-b1bd-9071a65a73a6</wsa:MessageID>" +
 							"<wsa:Action>urn:getQuote</wsa:Action>" +
 						"</soapenv:Header>" +
