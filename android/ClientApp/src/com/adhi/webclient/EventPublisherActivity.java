@@ -83,10 +83,16 @@ public class EventPublisherActivity extends Activity {
 		protected void onPostExecute(String result) {
 			// TODO Auto-generated method stub
 			
-			Log.i(TAG, result);
+			Log.i(TAG, "result" + result);
+			if(result == null){
+				publish .setEnabled(true);
+				Toast.makeText(getApplicationContext(), "Connection error", Toast.LENGTH_SHORT).show();
+			} else {
+				publish .setEnabled(true);
+				Toast.makeText(getApplicationContext(), "Messaged Published", Toast.LENGTH_SHORT).show();
+			}
 			//txt.setText(result);
-			publish .setEnabled(true);
-			Toast.makeText(getApplicationContext(), "Messaged Published", Toast.LENGTH_SHORT).show();
+			
 			
 		}
 		private String readStream(InputStream in) {
