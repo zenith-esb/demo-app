@@ -15,6 +15,7 @@ import org.ksoap2.transport.AndroidHttpTransport;
 
 
 import com.adhi.webclient.util.ClientUtil;
+import com.adhi.webclient.util.XMLProcessor;
 
 
 
@@ -71,7 +72,7 @@ public class ClientRequestActivity extends Activity{
 				  data = readStream(con.getInputStream());
 				  */
 				//  data = getKSoapMessage("A");
-				  data = sendMessage(url, getMessageBody());
+				  data = XMLProcessor.processXML(sendMessage(url, getMessageBody()));
 				  } catch (Exception e) {
 				  e.printStackTrace();
 				}
