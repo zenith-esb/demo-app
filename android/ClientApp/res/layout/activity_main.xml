@@ -32,8 +32,26 @@
                 android:id="@+id/main_send_btn"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Send Request" />
+                android:text="Find Available Seats" />
         </LinearLayout>
     </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="44dp"
+        android:src="@drawable/zenith_logo" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageView1"
+        android:layout_centerHorizontal="true"
+        android:text="Client App"
+        android:textSize="20sp" />
 
 </RelativeLayout>
