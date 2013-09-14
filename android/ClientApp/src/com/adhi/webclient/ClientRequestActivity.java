@@ -8,6 +8,11 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
 
+import org.ksoap2.SoapEnvelope;
+import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapSerializationEnvelope;
+import org.ksoap2.transport.AndroidHttpTransport;
+
 
 import com.adhi.webclient.util.ClientUtil;
 
@@ -17,6 +22,7 @@ import com.adhi.webclient.util.ClientUtil;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -64,6 +70,7 @@ public class ClientRequestActivity extends Activity{
 				    .openConnection();
 				  data = readStream(con.getInputStream());
 				  */
+				//  data = getKSoapMessage("A");
 				  data = sendMessage(url, getMessageBody());
 				  } catch (Exception e) {
 				  e.printStackTrace();
@@ -125,29 +132,79 @@ public class ClientRequestActivity extends Activity{
 			String line = null;
 			StringBuffer sb = new StringBuffer();
 			while ((line = reader.readLine()) != null) {
+				
 			    sb.append(line);
 			}
 			is.close();
 			String response = sb.toString();
+			Log.d("TEST", response);
 			return response;
 		}
 
 		private String getMessageBody() {
 			// TODO Auto-generated method stub
+			String msg = "<ns1:getAvailableSeats xmlns:ns1=\"http://service.zenith.com\">" +
+			"<ns1:compartment>A</ns1:compartment></ns1:getAvailableSeats>";
+			
 			String body = "<?xml version='1.0' encoding='UTF-8'?>" +
 					"<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\">" +
 						"<soapenv:Header xmlns:wsa=\"http://www.w3.org/2005/08/addressing\">" +
-							"<wsa:To>http://192.168.106.1:9000/services/SimpleStockQuoteService</wsa:To>" +
+							"<wsa:To>http://192.168.106.1:8080/axis2/services/SeatService</wsa:To>" +
 							"<wsa:MessageID>urn:uuid:5d988edb-fd88-4f8c-b1bd-9071a65a73a6</wsa:MessageID>" +
-							"<wsa:Action>urn:getQuote</wsa:Action>" +
+							"<wsa:Action>urn:getAvailableSeats</wsa:Action>" +
 						"</soapenv:Header>" +
 						"<soapenv:Body>" +
-							"<m0:getQuote xmlns:m0=\"http://services.samples\">" +
-								"<m0:request><m0:symbol>IBM</m0:symbol></m0:request>" +
-							"</m0:getQuote>" +
+							msg +
 						"</soapenv:Body>" +
 					"</soapenv:Envelope>";
 			return body;
+			
+//			String body = "<?xml version='1.0' encoding='UTF-8'?>" +
+//					"<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\">" +
+//						"<soapenv:Header xmlns:wsa=\"http://www.w3.org/2005/08/addressing\">" +
+//							"<wsa:To>http://192.168.106.1:9000/services/SimpleStockQuoteService</wsa:To>" +
+//							"<wsa:MessageID>urn:uuid:5d988edb-fd88-4f8c-b1bd-9071a65a73a6</wsa:MessageID>" +
+//							"<wsa:Action>urn:getQuote</wsa:Action>" +
+//						"</soapenv:Header>" +
+//						"<soapenv:Body>" +
+//							"<m0:getQuote xmlns:m0=\"http://services.samples\">" +
+//								"<m0:request><m0:symbol>IBM</m0:symbol></m0:request>" +
+//							"</m0:getQuote>" +
+//						"</soapenv:Body>" +
+//					"</soapenv:Envelope>";
+//			return body;
+		}
+		
+		public String getKSoapMessage(String compartment){
+			String NAMESPACE = "http://service.zenith.com";
+			String SOAP_METHOD = "getAvailableSeats";
+			String SOAP_ACTION = "getAvailableSeats";
+			String result = "None";
+			String URL = "http://192.168.106.1:8080/axis2/services/SeatService?wsdl";
+			SoapObject request = new SoapObject(NAMESPACE, SOAP_METHOD);    	
+	    	request.addProperty("account", compartment);
+	    	
+	    	SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+	    	envelope.dotNet = true;
+	    	envelope.setOutputSoapObject(request);
+	    	
+	    	AndroidHttpTransport aht = new AndroidHttpTransport(URL);
+
+	    	try
+	    	{
+	    		aht.call(SOAP_ACTION, envelope);
+
+	    		
+	    		SoapObject resultsRequestSOAP = (SoapObject) envelope.bodyIn;                	               
+				result =resultsRequestSOAP.toString();
+
+	    	//	String fname = player.getProperty("FirstName").toString();
+
+	    	} catch (Exception ex) {
+	    		result = null;
+	    	}    
+	    	
+	    	return result;
 		}
 	}
 
