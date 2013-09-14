@@ -60,7 +60,7 @@ public class ClientRequestActivity extends Activity{
 			
 			String data = null;
 			try {//http://localhost:9000/services/SimpleStockQuoteService
-				  URL url = new URL(ClientUtil.getDataRequestServiceUrl()+ "?wsdl");
+				  URL url = new URL(ClientUtil.getDataRequestServiceUrl());
 				  
 				  /**
 				   * HTTP GET thing
