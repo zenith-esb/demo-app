@@ -159,20 +159,6 @@ public class ClientRequestActivity extends Activity{
 					"</soapenv:Envelope>";
 			return body;
 			
-//			String body = "<?xml version='1.0' encoding='UTF-8'?>" +
-//					"<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\">" +
-//						"<soapenv:Header xmlns:wsa=\"http://www.w3.org/2005/08/addressing\">" +
-//							"<wsa:To>http://192.168.106.1:9000/services/SimpleStockQuoteService</wsa:To>" +
-//							"<wsa:MessageID>urn:uuid:5d988edb-fd88-4f8c-b1bd-9071a65a73a6</wsa:MessageID>" +
-//							"<wsa:Action>urn:getQuote</wsa:Action>" +
-//						"</soapenv:Header>" +
-//						"<soapenv:Body>" +
-//							"<m0:getQuote xmlns:m0=\"http://services.samples\">" +
-//								"<m0:request><m0:symbol>IBM</m0:symbol></m0:request>" +
-//							"</m0:getQuote>" +
-//						"</soapenv:Body>" +
-//					"</soapenv:Envelope>";
-//			return body;
 		}
 		
 		public String getKSoapMessage(String compartment){
