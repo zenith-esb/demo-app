@@ -17,7 +17,7 @@ public class MessagePublisher {
 		
 
 		String body = "test";
-		String pubUrl = "http://192.168.0.1:8080/Message" ;
+		String pubUrl = "http://192.168.0.2:8280/message/All" ;
 		URL url;
 		try {
 			url = new URL(pubUrl);
