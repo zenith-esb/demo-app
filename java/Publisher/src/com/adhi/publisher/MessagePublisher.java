@@ -19,6 +19,7 @@ public class MessagePublisher extends Observable implements Runnable {
 	private String publishUrl = "http://127.0.0.1:8280/message";
 	private int count = 0;
 
+
 	private String data = null;
 
 	public String getBody() {
@@ -31,6 +32,7 @@ public class MessagePublisher extends Observable implements Runnable {
 
 	public String getPublishUrl() {
 		return publishUrl;
+
 	}
 
 	public void setPublishUrl(String publishUrl) {
