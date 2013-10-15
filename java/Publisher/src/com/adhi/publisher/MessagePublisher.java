@@ -16,7 +16,7 @@ import java.util.Observable;
 public class MessagePublisher extends Observable implements Runnable {
 	
 	private String body = "";
-	private String publishUrl = "http://127.0.0.1:8280/message";
+	private String publishUrl = "http://192.168.0.2:8280/message";
 	private int count = 0;
 
 
