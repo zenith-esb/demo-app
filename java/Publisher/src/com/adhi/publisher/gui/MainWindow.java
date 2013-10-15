@@ -25,7 +25,7 @@ import javax.swing.JProgressBar;
 
 public class MainWindow implements Observer{
 
-	private JFrame frame;
+	private JFrame frmPublisher;
 	private JTextField textField;
 	private String url;
 	private String to = "All";
@@ -44,7 +44,7 @@ public class MainWindow implements Observer{
 			public void run() {
 				try {
 					
-					window.frame.setVisible(true);
+					window.frmPublisher.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -79,34 +79,36 @@ public class MainWindow implements Observer{
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame();
-		frame.setBounds(100, 100, 322, 300);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
+		frmPublisher = new JFrame();
+		frmPublisher.setTitle("Publisher");
+		frmPublisher.setBounds(100, 100, 322, 300);
+		frmPublisher.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmPublisher.getContentPane().setLayout(null);
 		
 		JPanel panel = new JPanel();
 		panel.setBorder(new TitledBorder(null, "Message", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel.setBounds(10, 89, 286, 140);
-		frame.getContentPane().add(panel);
+		frmPublisher.getContentPane().add(panel);
 		panel.setLayout(null);
 		
 		final JEditorPane editorPane = new JEditorPane();
 		editorPane.setBounds(10, 14, 266, 117);
+		editorPane.setText("Train will leave in a few moments");
 		panel.add(editorPane);
 		
 		JLabel lblServer = new JLabel("Server :");
 		lblServer.setBounds(20, 25, 46, 14);
-		frame.getContentPane().add(lblServer);
+		frmPublisher.getContentPane().add(lblServer);
 		
 		textField = new JTextField();
 		textField.setBounds(66, 22, 219, 20);
 		textField.setText(publisher.getPublishUrl());
-		frame.getContentPane().add(textField);
+		frmPublisher.getContentPane().add(textField);
 		textField.setColumns(10);
 		
 		JLabel lblTo = new JLabel("To        :");
 		lblTo.setBounds(20, 50, 46, 14);
-		frame.getContentPane().add(lblTo);
+		frmPublisher.getContentPane().add(lblTo);
 		
 		String[] items = {"All", "Gampaha", "Fort"};		
 		JComboBox comboBox = new JComboBox(items);
@@ -114,10 +116,12 @@ public class MainWindow implements Observer{
 			public void actionPerformed(ActionEvent arg0) {
 				JComboBox cb = (JComboBox)arg0.getSource();
 		        to = (String)cb.getSelectedItem();
+		        editorPane.setText(to.equals("All") ? "Train will leave in a few moments"
+		        		: "Train will reach " + to + " in a few moments");
 			}
 		});
 		comboBox.setBounds(66, 50, 219, 20);
-		frame.getContentPane().add(comboBox);
+		frmPublisher.getContentPane().add(comboBox);
 		
 		JButton btnSend = new JButton("Send");
 		btnSend.addActionListener(new ActionListener() {
@@ -126,19 +130,19 @@ public class MainWindow implements Observer{
 				url = textField.getText() + "/" + to;  
 			
 				System.out.println(url +" - "+ editorPane.getText());
-				publisher.setBody(editorPane.getText());
+				publisher.setBody(generateMessageBody(editorPane.getText()));
 				publisher.setPublishUrl(url);
 				Thread t = new Thread(publisher);
 				t.start();
 			}
 		});
 		btnSend.setBounds(207, 228, 89, 23);
-		frame.getContentPane().add(btnSend);
+		frmPublisher.getContentPane().add(btnSend);
 		
 		progressBar = new JProgressBar(0,100);
 		progressBar.setValue(0);
 		progressBar.setBounds(10, 231, 187, 20);
-		frame.getContentPane().add(progressBar);
+		frmPublisher.getContentPane().add(progressBar);
 	}
 
 	@Override
@@ -151,5 +155,15 @@ public class MainWindow implements Observer{
 			
 		}
 				
+	}
+	/**
+	 * generate the message body. here text/csv type body is generated
+	 * @param text
+	 * @return
+	 */
+	private String generateMessageBody(String text){
+		
+		String body = "Notification," + text;
+		return body;
 	}
 }
