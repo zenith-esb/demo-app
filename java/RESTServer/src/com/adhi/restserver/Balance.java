@@ -12,16 +12,7 @@ public class Balance {
 	
 		double random;
 		DecimalFormat df = new DecimalFormat("###.##");
-		
-	 // This method is called if HTML is request
-	 @GET
-	 @Produces(MediaType.TEXT_HTML)
-	 public String sayHtmlHello() {
-			  
-		 random = Math.random() * 100;
-		return "<html> " + "<title>" + "Zenith Balance Service" + "</title>"
-	       + "<body><h1>" + "<b>Balance :</b>" + df.format(random)+ "</body></h1>" + "</html> ";
-	  }
+	
 	 // This method is called if XML is request
 	  @GET
 	  @Produces(MediaType.TEXT_XML)
