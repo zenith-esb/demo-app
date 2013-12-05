@@ -1,0 +1,18 @@
+<html>
+<head>
+	<link rel='stylesheet' type='text/css' href='style/demo.css'>
+</head>
+<body>
+	<div id="banner">Zenith Demo App</div>
+	<div id="main">
+		<div class='Icon'>
+			<img alt="" src="images/z3.png" align="middle">
+		</div>
+        <div id='formdiv'>
+        	<form  action="https://localhost:8280/restservices/balance/" method="get">
+        		Id <input type="text"/> <input type="submit"/ value="Check">
+        	</form>
+        </div>
+	</div>
+</body>
+</html>
